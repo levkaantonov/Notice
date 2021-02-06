@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.fragment_start.*
 import levkaantonov.com.study.notice.R
 import levkaantonov.com.study.notice.databinding.FragmentStartBinding
+import levkaantonov.com.study.notice.utils.APP_ACTIVITY
 import levkaantonov.com.study.notice.utils.TYPE_ROOM
 
 class StartFragment : Fragment() {
@@ -31,9 +31,10 @@ class StartFragment : Fragment() {
 
     private fun initialization() {
         mViewModel = ViewModelProvider(this).get(StartFragmentVewModel::class.java)
-        start_btn_room.setOnClickListener {
-            mViewModel.initDb(TYPE_ROOM)
+        mBinding.startBtnRoom.setOnClickListener {
+            mViewModel.initDb(TYPE_ROOM){
+                APP_ACTIVITY.mNavController.navigate(R.id.action_startFragment_to_mainFragment)
+            }
         }
-
     }
 }
