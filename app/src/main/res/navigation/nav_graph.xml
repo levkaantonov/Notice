@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/noticeFragment"
-        android:name="levkaantonov.com.study.notice.screens.NoticeFragment"
+        android:name="levkaantonov.com.study.notice.screens.notice.NoticeFragment"
         android:label="fragment_notice"
         tools:layout="@layout/fragment_notice" >
         <action

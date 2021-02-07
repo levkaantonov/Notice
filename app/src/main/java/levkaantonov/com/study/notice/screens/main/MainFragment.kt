@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
 import androidx.recyclerview.widget.RecyclerView
 import levkaantonov.com.study.notice.R
 import levkaantonov.com.study.notice.databinding.FragmentMainBinding
@@ -38,7 +37,7 @@ class MainFragment : Fragment() {
         mViewModel = ViewModelProvider(this).get(MainFragmentViewModel::class.java)
         mViewModel.allNotices.observe(this, mObserverList)
         mBinding.btnAddNotice.setOnClickListener {
-            APP_ACTIVITY.mNavController.navigate(R.id.action_mainFragment_to_addNoticeFragment)
+            APP_ACTIVITY.navController.navigate(R.id.action_mainFragment_to_addNoticeFragment)
         }
     }
 
@@ -55,5 +54,13 @@ class MainFragment : Fragment() {
         _binding = null
         mViewModel.allNotices.removeObserver(mObserverList)
         mRecyclerView.adapter = null
+    }
+
+    companion object {
+        fun click(notice: AppNotice) {
+            val bundle = Bundle()
+            bundle.putSerializable("notice", notice)
+            APP_ACTIVITY.navController.navigate(R.id.action_mainFragment_to_noticeFragment, bundle)
+        }
     }
 }

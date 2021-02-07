@@ -38,7 +38,7 @@ class StartFragment : Fragment() {
         mViewModel = ViewModelProvider(this).get(StartFragmentVewModel::class.java)
         mBinding.startBtnRoom.setOnClickListener {
             mViewModel.initDb(TYPE_ROOM){
-                APP_ACTIVITY.mNavController.navigate(R.id.action_startFragment_to_mainFragment)
+                APP_ACTIVITY.navController.navigate(R.id.action_startFragment_to_mainFragment)
             }
         }
     }

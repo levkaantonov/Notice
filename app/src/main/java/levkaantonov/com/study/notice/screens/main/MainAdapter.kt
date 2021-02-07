@@ -9,12 +9,23 @@ import levkaantonov.com.study.notice.R
 import levkaantonov.com.study.notice.models.AppNotice
 
 class MainAdapter : RecyclerView.Adapter<MainAdapter.MainHolder>() {
-    private var mListNotice = emptyList<AppNotice>()
+    private var mListNotises = emptyList<AppNotice>()
 
 
     class MainHolder(view: View) : RecyclerView.ViewHolder(view) {
         val nameNotice: TextView = view.findViewById(R.id.item_notice_name)
         val textNotice: TextView = view.findViewById(R.id.item_notice_text)
+    }
+
+    override fun onViewAttachedToWindow(holder: MainHolder) {
+        holder.itemView.setOnClickListener {
+            MainFragment.click(mListNotises[holder.adapterPosition])
+        }
+    }
+
+    override fun onViewDetachedFromWindow(holder: MainHolder) {
+        holder.itemView.setOnClickListener(null)
+        super.onViewDetachedFromWindow(holder)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
@@ -23,14 +34,14 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.MainHolder>() {
     }
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
-        holder.textNotice.text = mListNotice[position].text
-        holder.nameNotice.text = mListNotice[position].name
+        holder.textNotice.text = mListNotises[position].text
+        holder.nameNotice.text = mListNotises[position].name
     }
 
-    override fun getItemCount(): Int = mListNotice.size
+    override fun getItemCount(): Int = mListNotises.size
 
     fun setList(list: List<AppNotice>) {
-        mListNotice = list
+        mListNotises = list
         notifyDataSetChanged()
     }
 }

@@ -10,7 +10,7 @@ import levkaantonov.com.study.notice.utils.APP_ACTIVITY
 
 class MainActivity : AppCompatActivity() {
     lateinit var mToolbar: Toolbar
-    lateinit var mNavController: NavController
+    lateinit var navController: NavController
     private var _binding: ActivityMainBinding? = null
     val mBindig get() = _binding!!
 
@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         APP_ACTIVITY = this
 
         mToolbar = mBindig.toolbar
-        mNavController = Navigation.findNavController(this, R.id.nav_host_frag)
+        navController = Navigation.findNavController(this, R.id.nav_host_frag)
         setSupportActionBar(mToolbar)
         title = getString(R.string.title)
     }
