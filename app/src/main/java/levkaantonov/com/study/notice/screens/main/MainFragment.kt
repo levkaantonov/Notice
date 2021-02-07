@@ -5,16 +5,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
+import androidx.recyclerview.widget.RecyclerView
 import levkaantonov.com.study.notice.R
 import levkaantonov.com.study.notice.databinding.FragmentMainBinding
+import levkaantonov.com.study.notice.models.AppNotice
 import levkaantonov.com.study.notice.utils.APP_ACTIVITY
 
 class MainFragment : Fragment() {
-    private var _binding : FragmentMainBinding? = null
+    private var _binding: FragmentMainBinding? = null
     private val mBinding get() = _binding!!
     private lateinit var mViewModel: MainFragmentViewModel
+    private lateinit var mRecyclerView: RecyclerView
+    private lateinit var mAdapter: MainAdapter
+    private lateinit var mObserverList: Observer<List<AppNotice>>
 
     override fun onStart() {
         super.onStart()
@@ -22,8 +28,16 @@ class MainFragment : Fragment() {
     }
 
     private fun initialization() {
+        mAdapter = MainAdapter()
+        mRecyclerView = mBinding.recyclerView
+        mRecyclerView.adapter = mAdapter
+        mObserverList = Observer {
+            val list = it.asReversed()
+            mAdapter.setList(list)
+        }
         mViewModel = ViewModelProvider(this).get(MainFragmentViewModel::class.java)
-        mBinding.btnAddNotice.setOnClickListener{
+        mViewModel.allNotices.observe(this, mObserverList)
+        mBinding.btnAddNotice.setOnClickListener {
             APP_ACTIVITY.mNavController.navigate(R.id.action_mainFragment_to_addNoticeFragment)
         }
     }
@@ -39,5 +53,7 @@ class MainFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        mViewModel.allNotices.removeObserver(mObserverList)
+        mRecyclerView.adapter = null
     }
 }
