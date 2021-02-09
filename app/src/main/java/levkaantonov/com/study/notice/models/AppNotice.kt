@@ -9,6 +9,7 @@ import java.io.Serializable
 data class AppNotice(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo val name: String = "",
-    @ColumnInfo val text: String = ""
+    @ColumnInfo val text: String = "",
+    val idFirebase: String = ""
 ) : Serializable {
 }

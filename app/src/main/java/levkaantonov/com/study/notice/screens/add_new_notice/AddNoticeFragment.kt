@@ -10,7 +10,7 @@ import levkaantonov.com.study.notice.R
 import levkaantonov.com.study.notice.databinding.FragmentAddNoticeBinding
 import levkaantonov.com.study.notice.models.AppNotice
 import levkaantonov.com.study.notice.utils.APP_ACTIVITY
-import levkaantonov.com.study.notice.utils.showMessage
+import levkaantonov.com.study.notice.utils.showToast
 
 class AddNoticeFragment : Fragment() {
 
@@ -42,7 +42,7 @@ class AddNoticeFragment : Fragment() {
             val name = mBinding.inputNameNotice.text.toString()
             val text = mBinding.inputTextNotice.text.toString()
             if(name.isEmpty()){
-                showMessage(getString(R.string.toast_error_enter_name))
+                showToast(getString(R.string.toast_error_enter_name))
                 return@setOnClickListener
             }
             mViewModel.insert(AppNotice(name =  name, text = text)){
