@@ -8,41 +8,46 @@ import levkaantonov.com.study.notice.models.AppNotice
 import levkaantonov.com.study.notice.utils.*
 
 class AppFirebaseRepository : DatabaseRepository {
-    private val mAuth = FirebaseAuth.getInstance()
-    private val mDbReference = FirebaseDatabase
-        .getInstance()
-        .reference
-        .child(mAuth.currentUser?.uid.toString())
+    init{
+        AUTH = FirebaseAuth.getInstance()
+    }
 
     override val allNotes: LiveData<List<AppNotice>> = AllNotisesLiveData()
 
     override suspend fun insert(notice: AppNotice, onSuccess: () -> Unit) {
-        val id = mDbReference.push().key.toString()
+        val id = FB_REF_DB.push().key.toString()
         val mapNotises = hashMapOf<String, Any>()
         mapNotises[ID_FB] = id
         mapNotises[NAME] = notice.name
         mapNotises[TEXT] = notice.text
 
-        mDbReference.child(id).updateChildren(mapNotises)
+        FB_REF_DB.child(id).updateChildren(mapNotises)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { showToast(it.message.toString()) }
     }
 
     override suspend fun delete(notice: AppNotice, onSuccess: () -> Unit) {
-        TODO("Not yet implemented")
-    }
-
-    override fun connectToDB(onSuccess: () -> Unit, onError: (String) -> Unit) {
-        mAuth.signInWithEmailAndPassword(EMAIL, PASSWORD)
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener {
-                mAuth.createUserWithEmailAndPassword(EMAIL, PASSWORD)
-                    .addOnSuccessListener { onSuccess() }
-                    .addOnFailureListener { onError(it.message.toString()) }
+        FB_REF_DB.child(notice.idFirebase).removeValue()
+            .addOnSuccessListener {
+                onSuccess()
+            }.addOnFailureListener {
+                showToast(it.message.toString())
             }
     }
 
+    override fun connectToDB(onSuccess: () -> Unit, onError: (String) -> Unit) {
+        AUTH.signInWithEmailAndPassword(EMAIL, PASSWORD)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener {
+                AUTH.createUserWithEmailAndPassword(EMAIL, PASSWORD)
+                    .addOnSuccessListener { onSuccess() }
+                    .addOnFailureListener { onError(it.message.toString()) }
+            }
+        CURRENT_ID = AUTH.currentUser?.uid.toString()
+        FB_REF_DB = FirebaseDatabase.getInstance().reference.child(CURRENT_ID)
+    }
+
     override fun signOut() {
-        mAuth.signOut()
+        AUTH.signOut()
     }
 }

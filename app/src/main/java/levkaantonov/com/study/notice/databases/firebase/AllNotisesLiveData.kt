@@ -7,21 +7,16 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import levkaantonov.com.study.notice.models.AppNotice
+import levkaantonov.com.study.notice.utils.FB_REF_DB
 
 class AllNotisesLiveData : LiveData<List<AppNotice>>() {
-    private val mAuth = FirebaseAuth.getInstance()
-    private val mDbReference = FirebaseDatabase
-        .getInstance()
-        .reference
-        .child(mAuth.currentUser?.uid.toString())
-
     override fun onActive() {
-        mDbReference.addValueEventListener(listener)
+        FB_REF_DB.addValueEventListener(listener)
         super.onActive()
     }
 
     override fun onInactive() {
-        mDbReference.removeEventListener(listener)
+        FB_REF_DB.removeEventListener(listener)
         super.onInactive()
     }
 

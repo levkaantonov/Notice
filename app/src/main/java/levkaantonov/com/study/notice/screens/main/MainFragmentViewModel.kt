@@ -6,4 +6,7 @@ import levkaantonov.com.study.notice.utils.REPOSITORY
 
 class MainFragmentViewModel(application: Application) : AndroidViewModel(application) {
     val allNotices = REPOSITORY.allNotes
+    fun signOut(){
+        REPOSITORY.signOut()
+    }
 }
