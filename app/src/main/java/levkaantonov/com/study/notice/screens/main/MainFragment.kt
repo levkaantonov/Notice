@@ -10,6 +10,7 @@ import levkaantonov.com.study.notice.R
 import levkaantonov.com.study.notice.databinding.FragmentMainBinding
 import levkaantonov.com.study.notice.models.AppNotice
 import levkaantonov.com.study.notice.utils.APP_ACTIVITY
+import levkaantonov.com.study.notice.utils.AppPreference
 
 class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
@@ -63,6 +64,7 @@ class MainFragment : Fragment() {
         when (item.itemId) {
             R.id.btn_exit -> {
                 mViewModel.signOut()
+                AppPreference.setInitUser(false)
                 APP_ACTIVITY.navController.navigate(R.id.action_mainFragment_to_startFragment)
             }
         }

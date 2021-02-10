@@ -8,7 +8,7 @@ import levkaantonov.com.study.notice.models.AppNotice
 import levkaantonov.com.study.notice.utils.*
 
 class AppFirebaseRepository : DatabaseRepository {
-    init{
+    init {
         AUTH = FirebaseAuth.getInstance()
     }
 
@@ -36,13 +36,29 @@ class AppFirebaseRepository : DatabaseRepository {
     }
 
     override fun connectToDB(onSuccess: () -> Unit, onError: (String) -> Unit) {
-        AUTH.signInWithEmailAndPassword(EMAIL, PASSWORD)
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener {
-                AUTH.createUserWithEmailAndPassword(EMAIL, PASSWORD)
-                    .addOnSuccessListener { onSuccess() }
-                    .addOnFailureListener { onError(it.message.toString()) }
-            }
+        if (AppPreference.getInitUser()) {
+            initRefs()
+            onSuccess()
+        } else {
+            AUTH.signInWithEmailAndPassword(EMAIL, PASSWORD)
+                .addOnSuccessListener {
+                    initRefs()
+                    onSuccess()
+                }
+                .addOnFailureListener {
+                    AUTH.createUserWithEmailAndPassword(EMAIL, PASSWORD)
+                        .addOnSuccessListener {
+                            initRefs()
+                            onSuccess()
+                        }
+                        .addOnFailureListener { onError(it.message.toString()) }
+                }
+        }
+
+
+    }
+
+    private fun initRefs() {
         CURRENT_ID = AUTH.currentUser?.uid.toString()
         FB_REF_DB = FirebaseDatabase.getInstance().reference.child(CURRENT_ID)
     }
