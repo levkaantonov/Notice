@@ -16,7 +16,7 @@ class StartFragmentVewModel(application: Application) : AndroidViewModel(applica
     fun initDb(type: String, onSuccess: () -> Unit) {
         when (type) {
             TYPE_ROOM -> {
-                var dao = AppRoomDb.getInstance(mContext).getAppRoomDao()
+                val dao = AppRoomDb.getInstance(mContext).getAppRoomDao()
                 REPOSITORY = AppRoomRepository(dao)
                 onSuccess()
             }

@@ -1,12 +1,13 @@
 package levkaantonov.com.study.notice.databases.room
 
 import android.content.Context
+import androidx.lifecycle.LifecycleOwner
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import levkaantonov.com.study.notice.models.AppNotice
 
-@Database(entities = [AppNotice::class], version = 1)
+@Database(entities = [AppNotice::class], version = 1, exportSchema = false)
 abstract class AppRoomDb : RoomDatabase() {
     abstract fun getAppRoomDao(): AppRoomDao
 
